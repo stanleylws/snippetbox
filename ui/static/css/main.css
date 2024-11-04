@@ -248,6 +248,7 @@ button:hover {
 }
 
 .snippet .metadata time {
+    font-size: medium;
     display: inline-block;
 }
 

@@ -7,6 +7,11 @@ import (
     "snippetbox.stanley.net/internal/models"
 )
 
+type templateData struct {
+    Snippet *models.Snippet
+    Snippets []*models.Snippet
+}
+
 func newTemplateCache() (map[string]*template.Template, error) {
     cache := map[string]*template.Template{}
 
@@ -18,13 +23,17 @@ func newTemplateCache() (map[string]*template.Template, error) {
     for _, page := range pages {
         name := filepath.Base(page)
 
-        files := []string {
-            "./ui/html/base.tmpl",
-            "./ui/html/partials/nav.tmpl",
-            page,
+        ts, err := template.ParseFiles("./ui/html/base.tmpl")
+        if err != nil {
+            return nil, err
         }
 
-        ts, err := template.ParseFiles(files...)
+        ts, err = ts.ParseGlob("./ui/html/partials/*.tmpl")
+        if err != nil {
+            return nil, err
+        }
+
+        ts, err = ts.ParseFiles(page)
         if err != nil {
             return nil, err
         }
@@ -33,9 +42,4 @@ func newTemplateCache() (map[string]*template.Template, error) {
     }
 
     return cache, nil
-}
-
-type templateData struct {
-    Snippet *models.Snippet
-    Snippets []*models.Snippet
 }

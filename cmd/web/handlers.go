@@ -12,26 +12,26 @@ import (
 )
 
 type snippetCreateForm struct {
-	Title               string `form:"title"`
-	Content             string `form:"content"`
-	Expires             int    `form:"expires"`
+	Title	string	`form:"title"`
+	Content string	`form:"content"`
+	Expires int		`form:"expires"`
 	validator.Validator `form:"-"`
 }
 
 type userSignupForm struct {
-	Name                string `form:"name"`
-	Email               string `form:"email"`
-	Password            string `form:"password"`
+	Name		string	`form:"name"`
+	Email		string	`form:"email"`
+	Password	string	`form:"password"`
 	validator.Validator `form:"-"`
 }
 
 type userLoginForm struct {
-	Email               string `form:"email"`
-	Password            string `form:"password"`
-	validator.Validator `form:"-"`
+	Email		string	`form:"email"`
+	Password	string	`form:"password"`
+	validator.Validator	`form:"-"`
 }
 
-func ping(w http.ResponseWriter, r *http.Request) {
+func ping (w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("OK"))
 }
 
@@ -80,7 +80,7 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
-	data.Form = snippetCreateForm{
+	data.Form = snippetCreateForm {
 		Expires: 365,
 	}
 

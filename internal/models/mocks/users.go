@@ -1,10 +1,27 @@
 package mocks
 
 import (
+	"time"
+
 	"snippetbox.stanley.net/internal/models"
 )
 
 type UserModel struct{}
+
+func (m *UserModel) Get(id int) (*models.User, error) { 
+	switch id {
+	case 1:
+		user := &models.User {
+			Id: 1, 
+			Name: "Alice Bob",
+			Email: "alice@example.com",
+			Created: time.Date(2024, 11, 28, 10, 10, 0, 0, time.UTC),
+		}
+		return user, nil
+	default:
+		return nil, models.ErrNoRecord
+	}
+}
 
 func (m *UserModel) Insert(name, email, password string) error {
 	switch email {

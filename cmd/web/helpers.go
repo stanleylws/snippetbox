@@ -89,3 +89,7 @@ func (app *application) isAuthenticated(r *http.Request) bool {
 
 	return isAuthenticated
 }
+
+func (app *application) getAuthenticatedUserId(r *http.Request) int {
+	return app.sessionManager.GetInt(r.Context(), "authenticatedUserID")
+}

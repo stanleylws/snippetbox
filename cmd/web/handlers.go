@@ -78,6 +78,20 @@ func (app *application) snippetView(w http.ResponseWriter, r *http.Request) {
 	app.render(w, http.StatusOK, "view.tmpl", data)
 }
 
+func (app *application) accountView(w http.ResponseWriter, r *http.Request) {
+	id := app.getAuthenticatedUserId(r)
+	user, err := app.users.Get(id)
+	if err != nil {
+		app.errorLog.Output(1, err.Error())
+		http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+		return
+	}
+
+	data := app.newTemplateData(r)
+	data.User = user
+	app.render(w, http.StatusOK, "account.tmpl", data)
+}
+
 func (app *application) snippetCreate(w http.ResponseWriter, r *http.Request) {
 	data := app.newTemplateData(r)
 	data.Form = snippetCreateForm {

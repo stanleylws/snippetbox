@@ -43,12 +43,12 @@ func newTestApplication(t *testing.T) *application {
 	sessionManager.Cookie.Secure = true
 
 	return &application{
-		errorLog: log.New(io.Discard, "", 0),
-		infoLog: log.New(io.Discard, "", 0),
-		snippets: &mocks.SnippetModel{},
-		users: &mocks.UserModel{},
-		templateCache: templateCache,
-		formDecoder: formDecoder,
+		errorLog:       log.New(io.Discard, "", 0),
+		infoLog:        log.New(io.Discard, "", 0),
+		snippets:       &mocks.SnippetModel{},
+		users:          &mocks.UserModel{},
+		templateCache:  templateCache,
+		formDecoder:    formDecoder,
 		sessionManager: sessionManager,
 	}
 }
@@ -91,7 +91,7 @@ func (ts *testServer) get(t *testing.T, urlPath string) (int, http.Header, strin
 }
 
 func (ts *testServer) postForm(t *testing.T, urlPath string, form url.Values) (int, http.Header, string) {
-	rs, err := ts.Client().PostForm(ts.URL + urlPath, form)
+	rs, err := ts.Client().PostForm(ts.URL+urlPath, form)
 	if err != nil {
 		t.Fatal(err)
 	}

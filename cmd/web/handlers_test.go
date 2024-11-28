@@ -27,40 +27,40 @@ func TestSnippetView(t *testing.T) {
 	defer ts.Close()
 
 	tests := []struct {
-		name string
-		urlPath string
+		name     string
+		urlPath  string
 		wantCode int
 		wantBody string
 	}{
 		{
-			name: "Valid ID",
-			urlPath: "/snippet/view/1",
+			name:     "Valid ID",
+			urlPath:  "/snippet/view/1",
 			wantCode: http.StatusOK,
 			wantBody: "An old silent pond...",
 		},
 		{
-			name: "Non-existent ID",
-			urlPath: "/snippet/view/2",
+			name:     "Non-existent ID",
+			urlPath:  "/snippet/view/2",
 			wantCode: http.StatusNotFound,
 		},
 		{
-			name: "Negative ID",
-			urlPath: "/snippet/view/-1",
+			name:     "Negative ID",
+			urlPath:  "/snippet/view/-1",
 			wantCode: http.StatusNotFound,
 		},
 		{
-			name: "Decimal ID",
-			urlPath: "/snippet/view/1.23",
+			name:     "Decimal ID",
+			urlPath:  "/snippet/view/1.23",
 			wantCode: http.StatusNotFound,
 		},
 		{
-			name: "String ID",
-			urlPath: "/snippet/view/foo",
+			name:     "String ID",
+			urlPath:  "/snippet/view/foo",
 			wantCode: http.StatusNotFound,
 		},
 		{
-			name: "Empty ID",
-			urlPath: "/snippet/view/",
+			name:     "Empty ID",
+			urlPath:  "/snippet/view/",
 			wantCode: http.StatusNotFound,
 		},
 	}
@@ -87,89 +87,89 @@ func TestUserSignup(t *testing.T) {
 	validCSRFToken := extractCSRFToken(t, body)
 
 	const (
-		validName = "Bob"
+		validName     = "Bob"
 		validPassword = "validPa$$word"
-		validEmail = "bob@example.com"
-		formTag = "<form action='/user/signup' method='POST' novalidate>"
+		validEmail    = "bob@example.com"
+		formTag       = "<form action='/user/signup' method='POST' novalidate>"
 	)
 
-	tests :=[]struct {
-		name		string
-		username	string
-		email		string
-		password	string
-		csrfToken	string
-		wantCode	int
-		wantFormTag	string
-	} {
+	tests := []struct {
+		name        string
+		username    string
+		email       string
+		password    string
+		csrfToken   string
+		wantCode    int
+		wantFormTag string
+	}{
 		{
-			name:		"Valid submission",
-			username:	validName,
-			email:		validEmail,
-			password:	validPassword,
-			csrfToken:	validCSRFToken,
-			wantCode:	http.StatusSeeOther,
+			name:      "Valid submission",
+			username:  validName,
+			email:     validEmail,
+			password:  validPassword,
+			csrfToken: validCSRFToken,
+			wantCode:  http.StatusSeeOther,
 		},
 		{
-			name:		"Invalid CSRF Token",
-			username:	validName,
-			email:		validEmail,
-			password:	validPassword,
-			csrfToken:	"wrongToken",
-			wantCode:	http.StatusBadRequest,
+			name:      "Invalid CSRF Token",
+			username:  validName,
+			email:     validEmail,
+			password:  validPassword,
+			csrfToken: "wrongToken",
+			wantCode:  http.StatusBadRequest,
 		},
 		{
-			name:		"Empty name",
-			username:	"",
-			email:		validEmail,
-			password:	validPassword,
-			csrfToken:	validCSRFToken,
-			wantCode:	http.StatusUnprocessableEntity,
+			name:        "Empty name",
+			username:    "",
+			email:       validEmail,
+			password:    validPassword,
+			csrfToken:   validCSRFToken,
+			wantCode:    http.StatusUnprocessableEntity,
 			wantFormTag: formTag,
 		},
 		{
-			name:		"Empty email",
-			username:	validName,
-			email:		"",
-			password:	validPassword,
-			csrfToken:	validCSRFToken,
-			wantCode:	http.StatusUnprocessableEntity,
+			name:        "Empty email",
+			username:    validName,
+			email:       "",
+			password:    validPassword,
+			csrfToken:   validCSRFToken,
+			wantCode:    http.StatusUnprocessableEntity,
 			wantFormTag: formTag,
 		},
 		{
-			name:		"Empty password",
-			username:	validName,
-			email:		validEmail,
-			password:	"",
-			csrfToken:	validCSRFToken,
-			wantCode:	http.StatusUnprocessableEntity,
+			name:        "Empty password",
+			username:    validName,
+			email:       validEmail,
+			password:    "",
+			csrfToken:   validCSRFToken,
+			wantCode:    http.StatusUnprocessableEntity,
 			wantFormTag: formTag,
 		},
 		{
-			name:		"Invalid email",
-			username:	validName,
-			email:		"bob@example.",
-			password:	validPassword,	
-			csrfToken:	validCSRFToken,
-			wantCode:	http.StatusUnprocessableEntity,
+			name:        "Invalid email",
+			username:    validName,
+			email:       "bob@example.",
+			password:    validPassword,
+			csrfToken:   validCSRFToken,
+			wantCode:    http.StatusUnprocessableEntity,
 			wantFormTag: formTag,
 		},
 		{
-			name:		"Short password",
-			username:	validName,
-			email:		validEmail,
-			password:	"pa$$",	
-			csrfToken:	validCSRFToken,
-			wantCode:	http.StatusUnprocessableEntity,
+			name:        "Short password",
+			username:    validName,
+			email:       validEmail,
+			password:    "pa$$",
+			csrfToken:   validCSRFToken,
+			wantCode:    http.StatusUnprocessableEntity,
 			wantFormTag: formTag,
 		},
 		{
-			name:		"Duplicate email",
-			username:	validName,
-			email:		"dupe@example.com",
-			password:	validPassword,	
-			csrfToken:	validCSRFToken,
-			wantCode:	http.StatusUnprocessableEntity,
+			name:        "Duplicate email",
+			username:    validName,
+			email:       "dupe@example.com",
+			password:    validPassword,
+			csrfToken:   validCSRFToken,
+			wantCode:    http.StatusUnprocessableEntity,
 			wantFormTag: formTag,
 		},
 	}

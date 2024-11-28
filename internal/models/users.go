@@ -17,11 +17,11 @@ type UserModelInterface interface {
 }
 
 type User struct {
-	Id				int
-	Name			string
-	Email			string
-	HashedPassword	[]byte 
-	Created			time.Time
+	Id             int
+	Name           string
+	Email          string
+	HashedPassword []byte
+	Created        time.Time
 }
 
 type UserModel struct {
@@ -51,7 +51,6 @@ func (m *UserModel) Insert(name, email, password string) error {
 	return nil
 }
 
-
 func (m *UserModel) Authenticate(email, password string) (int, error) {
 	var id int
 	var hashedPassword []byte
@@ -79,7 +78,7 @@ func (m *UserModel) Authenticate(email, password string) (int, error) {
 }
 
 func (m *UserModel) Exists(id int) (bool, error) {
-	var exists bool	
+	var exists bool
 
 	stmt := "SELECT EXISTS(SELECT true FROM users WHERE id = ?)"
 

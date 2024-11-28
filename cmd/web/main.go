@@ -1,6 +1,6 @@
 package main
 
-import ( 
+import (
 	"crypto/tls"
 	"database/sql"
 	"flag"
@@ -19,18 +19,20 @@ import (
 )
 
 type application struct {
-	errorLog 		*log.Logger
-	infoLog 		*log.Logger
-	snippets 		models.SnippetModelInterface
-	users			models.UserModelInterface
-	templateCache	map[string]*template.Template
-	formDecoder 	*form.Decoder
-	sessionManager	*scs.SessionManager
+	errorLog       *log.Logger
+	infoLog        *log.Logger
+	snippets       models.SnippetModelInterface
+	users          models.UserModelInterface
+	templateCache  map[string]*template.Template
+	formDecoder    *form.Decoder
+	sessionManager *scs.SessionManager
+	debugMode      bool
 }
 
 func main() {
 	addr := flag.String("addr", ":3001", "HTTP network address")
 	dsn := flag.String("dsn", "web:pass@/snippetbox?parseTime=true", "MySQL data source name")
+	debugMode := flag.Bool("debug", false, "Debug mode")
 
 	flag.Parse()
 
@@ -56,13 +58,14 @@ func main() {
 	sessionManager.Cookie.Secure = true
 
 	app := &application{
-		errorLog: errorLog,
-		infoLog: infoLog,
-		snippets: &models.SnippetModel{DB: db},
-		users: &models.UserModel{DB: db},
-		templateCache: templateCache,
-		formDecoder: formDecoder,
+		errorLog:       errorLog,
+		infoLog:        infoLog,
+		snippets:       &models.SnippetModel{DB: db},
+		users:          &models.UserModel{DB: db},
+		templateCache:  templateCache,
+		formDecoder:    formDecoder,
 		sessionManager: sessionManager,
+		debugMode:      *debugMode,
 	}
 
 	tlsConfig := &tls.Config{
@@ -70,12 +73,12 @@ func main() {
 	}
 
 	srv := &http.Server{
-		Addr: *addr,
-		ErrorLog: errorLog,
-		Handler: app.routes(),
-		TLSConfig: tlsConfig,
-		IdleTimeout: time.Minute,
-		ReadTimeout: 5 * time.Second,
+		Addr:         *addr,
+		ErrorLog:     errorLog,
+		Handler:      app.routes(),
+		TLSConfig:    tlsConfig,
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
 	}
 

@@ -196,7 +196,7 @@ func TestUserSignup(t *testing.T) {
 		{
 			name:        "Duplicate email",
 			username:    validName,
-			email:       "dupe@example.com",
+			email:       "alice@example.com",
 			password:    validPassword,
 			csrfToken:   validCSRFToken,
 			wantCode:    http.StatusUnprocessableEntity,

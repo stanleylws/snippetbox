@@ -6,16 +6,23 @@ import (
 	"snippetbox.stanley.net/internal/models"
 )
 
+const (
+	defaultUserId       = 1
+	defaultUserName     = "Alice Bob"
+	defaultUserEmail    = "alice@example.com"
+	defaultUserPassword = "pa$$word"
+)
+
 type UserModel struct{}
 
-func (m *UserModel) Get(id int) (*models.User, error) { 
+func (m *UserModel) Get(id int) (*models.User, error) {
 	switch id {
 	case 1:
-		user := &models.User {
-			Id: 1, 
-			Name: "Alice Bob",
-			Email: "alice@example.com",
-			Created: time.Date(2024, 11, 28, 10, 10, 0, 0, time.UTC),
+		user := &models.User{
+			Id: defaultUserId,	
+			Name: defaultUserName,
+			Email: defaultUserEmail,
+			Created: time.Now().UTC(),
 		}
 		return user, nil
 	default:
@@ -25,7 +32,7 @@ func (m *UserModel) Get(id int) (*models.User, error) {
 
 func (m *UserModel) Insert(name, email, password string) error {
 	switch email {
-	case "dupe@example.com":
+	case defaultUserEmail:
 		return models.ErrDuplicateEmail
 	default:
 		return nil
@@ -33,8 +40,8 @@ func (m *UserModel) Insert(name, email, password string) error {
 }
 
 func (m *UserModel) Authenticate(email, password string) (int, error) {
-	if email == "alice@example.com" && password == "pa$$word" {
-		return 1, nil
+	if email == defaultUserEmail && password == defaultUserPassword {
+		return defaultUserId, nil
 	}
 
 	return 0, models.ErrInvalidCredentials
@@ -42,9 +49,21 @@ func (m *UserModel) Authenticate(email, password string) (int, error) {
 
 func (m *UserModel) Exists(id int) (bool, error) {
 	switch id {
-	case 1:
+	case defaultUserId:
 		return true, nil
 	default:
 		return false, nil
 	}
+}
+
+func (m *UserModel) UpdatePassword(id int, currentPassword, newPassword string) error {
+	if id != defaultUserId {
+		return models.ErrNoRecord
+	}
+
+	if currentPassword != defaultUserPassword {
+		return models.ErrInvalidCredentials
+	}
+
+	return nil
 }
